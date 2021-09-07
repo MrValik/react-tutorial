@@ -5,10 +5,10 @@ import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 import PhotoItem from '../components/PhotoItem'
 import Loader from '../components/Loader'
-import { getPhotos } from '../services/photos-service'
 import { useTypedSelector } from '../app/hooks/useTypedSelector'
 import { AppDispatch } from '../store'
 import { IPhoto } from '../app/interfaces/photo'
+import { fetchAlbumPhotos } from '../store/album/actions'
 
 
 const PhotoList = styled.div`
@@ -42,7 +42,7 @@ const Photos:FC = () => {
 
 
   useEffect(():void => {
-    dispatch(getPhotos(params.id))
+    dispatch(fetchAlbumPhotos(params.id))
   }, [dispatch, params])
 
 

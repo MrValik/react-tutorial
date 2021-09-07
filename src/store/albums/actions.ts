@@ -3,9 +3,11 @@ import { IAlbum } from '../../app/interfaces/album'
 import { IAction } from "../../app/interfaces"
 const { 
   FETCH_ALBUMS_FAILED, FETCH_ALBUMS_SUCCEDDED, 
-  LOAD_MORE_ALBUMS, START_FETCHING_ALBUMS 
+  LOAD_MORE_ALBUMS, START_FETCHING_ALBUMS, FETCH_ALBUMS
 } = TYPES
 
+
+export const fetchAlbums = (limit: number):IAction<typeof FETCH_ALBUMS> => ({ type: FETCH_ALBUMS, payload: { limit }})
 
 export const startFetchingAlbums = ():IAction<typeof START_FETCHING_ALBUMS> => ({ type: START_FETCHING_ALBUMS })
 

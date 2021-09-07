@@ -2,8 +2,7 @@ import { useEffect, FC } from 'react'
 import { useDispatch } from 'react-redux'
 import styled from 'styled-components'
 import { AppDispatch } from '../store'
-import { getAlbums } from '../services/albums-service'
-import { loadMoreAlbums } from '../store/albums/actions'
+import { fetchAlbums, loadMoreAlbums } from '../store/albums/actions'
 import { useTypedSelector } from '../app/hooks/useTypedSelector'
 import { IAlbum } from '../app/interfaces/album'
 import AlbumItem from '../components/AlbumItem'
@@ -51,7 +50,7 @@ const Home:FC = () => {
 
 
   useEffect(():void => {
-    dispatch(getAlbums())
+    dispatch(fetchAlbums(limit))
   }, [dispatch, limit])
 
 
