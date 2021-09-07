@@ -1,6 +1,5 @@
-import { FC } from 'react'
+import React from 'react'
 import styled from 'styled-components'
-import { IPhoto } from '../interfaces'
 
 
 const PhotoItemCard = styled.div`
@@ -16,18 +15,10 @@ const Photo = styled.img`
 `
 
 
-interface IProps {
-  photo: IPhoto
-}
-
-
-const PhotoItem:FC<IProps> = ({ photo: { url, title } }) => {
+export default function PhotoItem({ photo: { url, title } }) {
   return (
     <PhotoItemCard className="shadow rounded">
       <Photo src={url} alt={title}/>
     </PhotoItemCard>
   )
 }
-
-
-export default PhotoItem

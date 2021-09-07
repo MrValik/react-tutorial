@@ -1,8 +1,9 @@
-import { useEffect, useState, useCallback, FC } from 'react'
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
 import AlbumItem from '../components/AlbumItem'
-import { IAlbum } from '../interfaces'
 import { getAlbums } from '../services/albums-service'
+import { loadMoreAlbums } from '../store/albums/actions'
 
 
 const HomePage = styled.div`
@@ -40,50 +41,19 @@ const LoadMoreButton = styled.button`
   height: 42px;
 `
 
-interface IAlbumState {
-  albums: IAlbum[]
-  count: number
-  total: number
-  loading: boolean
-}
 
-const initialState:IAlbumState = {
-  albums: [],
-  count: 20,
-  total: 100,
-  loading: false
-}
+export default function Home() {
+  const dispatch = useDispatch()
+  const { albums, loading, limit, total } = useSelector(state => state.albumsReducer)
 
 
-const Home:FC = () => {
-  const [data, setData] = useState<IAlbumState>(initialState)
-
-  const fetchingAlbums = useCallback(async ():Promise<void> => {
-    setData(data => ({
-      ...data,
-      loading: true
-    }))
-
-    const result = await getAlbums(data.count)
-
-    setData(data => ({
-      ...data,
-      albums: result,
-      loading: false
-    }))
-  }, [data.count])
+  useEffect(() => {
+    dispatch(getAlbums())
+  }, [dispatch, limit])
 
 
-  useEffect(():void => {
-    fetchingAlbums()
-  }, [fetchingAlbums])
-
-
-  const handleLoadMore = ():void => {
-    setData({
-      ...data,
-      count: data.count + 20
-    })
+  const handleLoadMore = () => {
+    dispatch(loadMoreAlbums())
   }
   
 
@@ -93,10 +63,10 @@ const Home:FC = () => {
       
       <hr />
 
-      {data.albums?.length ? (
+      {albums?.length ? (
         <>
           <AlbumList>
-            {data.albums.map((album, idx) => {
+            {albums.map((album, idx) => {
               return <AlbumItem 
                 key={album?.id} 
                 album={album} 
@@ -105,13 +75,13 @@ const Home:FC = () => {
             })}
           </AlbumList>
 
-          {data.total !== data.count ? (
+          {total !== limit ? (
             <LoadMoreButton 
               className="btn btn-primary shadow mt-4 mx-auto d-block"
               onClick={handleLoadMore}
-              disabled={data.loading}
+              disabled={loading}
             >
-              { data.loading 
+              {loading 
                   ? <LoadMore className="spinner spinner-border text-info"></LoadMore> 
                   : 'Load More'
               }
@@ -119,11 +89,6 @@ const Home:FC = () => {
           ) : null}
         </>
       ) : <NoData>No albums</NoData>}
-
-      
     </HomePage>
   )
 }
-
-
-export default Home

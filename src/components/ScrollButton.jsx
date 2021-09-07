@@ -1,4 +1,4 @@
-import { useState, FC } from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 
 
@@ -14,10 +14,10 @@ const Icon = styled.i`
 `
 
 
-const ScrollButton:FC = () => {
-  const [visible, setVisible] = useState<boolean>(false)
+export default function ScrollButton() {
+  const [visible, setVisible] = useState(false)
 
-  const scrollToTop = ():void => {
+  const scrollToTop = () => {
     window.scrollTo({
       top: 0,
       behavior: 'smooth'
@@ -26,7 +26,7 @@ const ScrollButton:FC = () => {
     window.removeEventListener('scroll', toggleVisible)
   }
 
-  const toggleVisible = ():void => {
+  const toggleVisible = () => {
     window.pageYOffset > window.innerHeight ? setVisible(true) : setVisible(false)
   }
 
@@ -46,6 +46,3 @@ const ScrollButton:FC = () => {
     </Button>
   )
 }
-
-
-export default ScrollButton

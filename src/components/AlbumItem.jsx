@@ -1,7 +1,6 @@
-import { FC } from 'react'
+import React from 'react'
 import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
-import { IAlbum } from '../interfaces'
 
 
 const AlbumItemContainer = styled.div`
@@ -25,13 +24,7 @@ const AlbumTitle = styled.h5`
 `
 
 
-interface IProps {
-  album: IAlbum
-  idx: number
-}
-
-
-const AlbumItem:FC<IProps> = ({ album: { id, title }, idx }) => {
+export default function AlbumItem({ album: { id, title }, idx }) {
   const history = useHistory()
 
   return (
@@ -44,13 +37,10 @@ const AlbumItem:FC<IProps> = ({ album: { id, title }, idx }) => {
       <button
         className="btn btn-info"
         style={{ height: '40px'}}
-        onClick={():void => history.push(`/${id}/photos`)}
+        onClick={() => history.push(`/${id}/photos`)}
       >
         Photos
       </button>
     </AlbumItemContainer>
   )
 }
-
-
-export default AlbumItem
