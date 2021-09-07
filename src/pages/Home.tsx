@@ -1,9 +1,12 @@
-import React, { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useEffect, FC } from 'react'
+import { useDispatch } from 'react-redux'
 import styled from 'styled-components'
-import AlbumItem from '../components/AlbumItem'
+import { AppDispatch } from '../store'
 import { getAlbums } from '../services/albums-service'
 import { loadMoreAlbums } from '../store/albums/actions'
+import { useTypedSelector } from '../app/hooks/useTypedSelector'
+import { IAlbum } from '../app/interfaces/album'
+import AlbumItem from '../components/AlbumItem'
 
 
 const HomePage = styled.div`
@@ -42,17 +45,17 @@ const LoadMoreButton = styled.button`
 `
 
 
-export default function Home() {
-  const dispatch = useDispatch()
-  const { albums, loading, limit, total } = useSelector(state => state.albumsReducer)
+const Home:FC = () => {
+  const dispatch = useDispatch<AppDispatch>()
+  const { albums, loading, limit, total } = useTypedSelector(state => state.albumsReducer)
 
 
-  useEffect(() => {
+  useEffect(():void => {
     dispatch(getAlbums())
   }, [dispatch, limit])
 
 
-  const handleLoadMore = () => {
+  const handleLoadMore = ():void => {
     dispatch(loadMoreAlbums())
   }
   
@@ -66,7 +69,7 @@ export default function Home() {
       {albums?.length ? (
         <>
           <AlbumList>
-            {albums.map((album, idx) => {
+            {albums.map((album:IAlbum, idx: number) => {
               return <AlbumItem 
                 key={album?.id} 
                 album={album} 
@@ -92,3 +95,6 @@ export default function Home() {
     </HomePage>
   )
 }
+
+
+export default Home

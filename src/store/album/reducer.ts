@@ -1,13 +1,19 @@
-import { FETCH_ALBUM_PHOTOS_FAILED, FETCH_ALBUM_PHOTOS_SUCCEDDED, START_FETCHING_ALBUM_PHOTOS } from "../types"
+import { TYPES } from "../types"
+import { IPhotoState } from '../../app/interfaces/photo'
+import { IAction } from "../../app/interfaces"
+const { 
+  FETCH_ALBUM_PHOTOS_FAILED, FETCH_ALBUM_PHOTOS_SUCCEDDED,
+  START_FETCHING_ALBUM_PHOTOS 
+} = TYPES
 
 
-const initialState = {
+const initialState:IPhotoState = {
   photos: [],
   loading: false
 }
 
 
-const AlbumReducer = (state = initialState, { type, payload }) => {
+const AlbumReducer = (state = initialState, { type, payload }: IAction<TYPES> ) => {
   switch(type) {
     case START_FETCHING_ALBUM_PHOTOS:
       return {

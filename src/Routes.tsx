@@ -1,11 +1,11 @@
-import { lazy, Suspense } from 'react'
+import { lazy, Suspense, FC } from 'react'
 import { Switch, Route } from 'react-router-dom'
 import Loader from './components/Loader'
 const Home = lazy(() => import('./pages/Home'))
 const Photos = lazy(() => import('./pages/Photos'))
 
 
-export default function Routes() {
+const Routes:FC = () => {
   return (
     <Suspense fallback={<Loader />}>
       <Switch>
@@ -21,3 +21,5 @@ export default function Routes() {
   )
 }
 
+
+export default Routes

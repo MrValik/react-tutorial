@@ -1,7 +1,13 @@
-import { FETCH_ALBUMS_FAILED, FETCH_ALBUMS_SUCCEDDED, LOAD_MORE_ALBUMS, START_FETCHING_ALBUMS } from "../types"
+import { IAction } from "../../app/interfaces"
+import { IAlbumState } from "../../app/interfaces/album"
+import { TYPES } from "../types"
+const {
+   FETCH_ALBUMS_FAILED, FETCH_ALBUMS_SUCCEDDED,
+   LOAD_MORE_ALBUMS, START_FETCHING_ALBUMS 
+} = TYPES
 
 
-const initialState = {
+const initialState:IAlbumState = {
   albums: [],
   limit: 20,
   total: 100,
@@ -9,7 +15,7 @@ const initialState = {
 }
 
 
-const AlbumsReducer = (state = initialState, { type, payload }) => {
+const AlbumsReducer = (state = initialState, { type, payload }: IAction<TYPES> ) => {
   switch(type) {
     case START_FETCHING_ALBUMS:
       return {

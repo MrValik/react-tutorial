@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { FC } from 'react'
 import styled from 'styled-components'
 
 
@@ -16,15 +16,12 @@ const Spinner = styled.div`
   height: 70px;
 `
 
-
-class Loader extends Component {
-  render() {
-    return (
-      <LoaderContainer>
-        <Spinner className="spinner spinner-border text-info"></Spinner>
-      </LoaderContainer>
-    )
-  }
+const Loader:FC = () => {
+  return (
+    <LoaderContainer>
+      <Spinner className="spinner spinner-border text-info"></Spinner>
+    </LoaderContainer>
+  )
 }
 
 

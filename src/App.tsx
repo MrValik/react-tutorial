@@ -1,9 +1,10 @@
+import { FC } from 'react'
 import { BrowserRouter as Router } from "react-router-dom"
 import ScrollButton from './components/ScrollButton'
 import Routes from './Routes'
 
 
-export default function App() {
+const App:FC = () => {
   return (
     <Router>
       <div className="container">
@@ -13,3 +14,6 @@ export default function App() {
     </Router>
   )
 }
+
+
+export default App

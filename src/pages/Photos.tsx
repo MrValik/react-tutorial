@@ -1,11 +1,14 @@
-import React, { useEffect } from 'react'
+import { useEffect, FC } from 'react'
 import { useParams } from 'react-router'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 import PhotoItem from '../components/PhotoItem'
 import Loader from '../components/Loader'
 import { getPhotos } from '../services/photos-service'
+import { useTypedSelector } from '../app/hooks/useTypedSelector'
+import { AppDispatch } from '../store'
+import { IPhoto } from '../app/interfaces/photo'
 
 
 const PhotoList = styled.div`
@@ -31,14 +34,14 @@ const NoData = styled.h4`
 `
 
 
-export default function Photos() {
-  const params = useParams()
+const Photos:FC = () => {
+  const params = useParams<{ id: string }>()
   const history = useHistory()
-  const dispatch = useDispatch()
-  const { photos, loading } = useSelector(state => state.albumReducer)
+  const dispatch = useDispatch<AppDispatch>()
+  const { photos, loading } = useTypedSelector(state => state.albumReducer)
 
 
-  useEffect(() => {
+  useEffect(():void => {
     dispatch(getPhotos(params.id))
   }, [dispatch, params])
 
@@ -59,7 +62,7 @@ export default function Photos() {
 
           {photos?.length ? (
             <PhotoList>
-              {photos.map(photo => {
+              {photos.map((photo:IPhoto) => {
                 return <PhotoItem 
                   key={photo.id}
                   photo={photo}
@@ -72,3 +75,6 @@ export default function Photos() {
     </div>
   )
 }
+
+
+export default Photos
