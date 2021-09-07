@@ -1,7 +1,10 @@
-import { useEffect, useState, useCallback, FC } from 'react'
+import { useEffect, FC } from 'react'
+import { useDispatch } from 'react-redux'
 import styled from 'styled-components'
+import { loadMoreAlbums } from '../app/features/albums/albumsSlice'
+import { useAppSelector } from '../app/hooks/useAppSelector'
+import { AppDispatch } from '../app/store'
 import AlbumItem from '../components/AlbumItem'
-import { IAlbum } from '../interfaces'
 import { getAlbums } from '../services/albums-service'
 
 
@@ -40,51 +43,17 @@ const LoadMoreButton = styled.button`
   height: 42px;
 `
 
-interface IAlbumState {
-  albums: IAlbum[]
-  count: number
-  total: number
-  loading: boolean
-}
-
-const initialState:IAlbumState = {
-  albums: [],
-  count: 20,
-  total: 100,
-  loading: false
-}
-
 
 const Home:FC = () => {
-  const [data, setData] = useState<IAlbumState>(initialState)
-
-  const fetchingAlbums = useCallback(async ():Promise<void> => {
-    setData(data => ({
-      ...data,
-      loading: true
-    }))
-
-    const result = await getAlbums(data.count)
-
-    setData(data => ({
-      ...data,
-      albums: result,
-      loading: false
-    }))
-  }, [data.count])
-
+  const { albums, limit, loading, total } = useAppSelector(state => state.albumsReducer)
+  const dispatch = useDispatch<AppDispatch>()
 
   useEffect(():void => {
-    fetchingAlbums()
-  }, [fetchingAlbums])
+    dispatch(getAlbums())
+  }, [dispatch, limit])
 
 
-  const handleLoadMore = ():void => {
-    setData({
-      ...data,
-      count: data.count + 20
-    })
-  }
+  const handleLoadMore = () => dispatch(loadMoreAlbums())
   
 
   return (
@@ -93,10 +62,10 @@ const Home:FC = () => {
       
       <hr />
 
-      {data.albums?.length ? (
+      {albums?.length ? (
         <>
           <AlbumList>
-            {data.albums.map((album, idx) => {
+            {albums.map((album, idx) => {
               return <AlbumItem 
                 key={album?.id} 
                 album={album} 
@@ -105,13 +74,13 @@ const Home:FC = () => {
             })}
           </AlbumList>
 
-          {data.total !== data.count ? (
+          {total !== limit ? (
             <LoadMoreButton 
               className="btn btn-primary shadow mt-4 mx-auto d-block"
               onClick={handleLoadMore}
-              disabled={data.loading}
+              disabled={loading}
             >
-              { data.loading 
+              {loading 
                   ? <LoadMore className="spinner spinner-border text-info"></LoadMore> 
                   : 'Load More'
               }
@@ -119,8 +88,6 @@ const Home:FC = () => {
           ) : null}
         </>
       ) : <NoData>No albums</NoData>}
-
-      
     </HomePage>
   )
 }

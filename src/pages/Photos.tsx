@@ -1,9 +1,12 @@
-import { useCallback, useEffect, useState, FC } from 'react'
+import { useEffect, FC } from 'react'
+import { useDispatch } from 'react-redux'
 import { useParams } from 'react-router'
 import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
+import { useAppSelector } from '../app/hooks/useAppSelector'
+import { AppDispatch } from '../app/store'
+import Loader from '../components/Loader'
 import PhotoItem from '../components/PhotoItem'
-import { IPhoto } from '../interfaces'
 import { getPhotos } from '../services/photos-service'
 
 
@@ -31,44 +34,43 @@ const NoData = styled.h4`
 
 
 const Photos:FC = () => {
+  const dispatch = useDispatch<AppDispatch>()
   const params = useParams<{ id?: string }>()
+  const { photos, loading } = useAppSelector(state => state.photosReducer)
   const history = useHistory()
-  const [photos, setPhotos] = useState<IPhoto[]>([])
-
-
-  const fetchingAlbumPhotos = useCallback(async ():Promise<void> => {
-    const result = await getPhotos(params?.id || '')
-    setPhotos(result)
-  }, [params])
 
 
   useEffect(():void => {
-    fetchingAlbumPhotos()
-  }, [fetchingAlbumPhotos])
+    dispatch(getPhotos(params.id))
+  }, [dispatch, params])
 
 
   return (
     <div className="container my-4">
-      <Button 
-        className="btn btn-dark"
-        onClick={():void => history.push('/')}
-      >
-        <i className="fas fa-chevron-circle-left" aria-hidden={true}></i>
-        Go Back
-      </Button>
+      {loading ? <Loader /> : (
+        <>
+          <Button 
+            className="btn btn-dark"
+            onClick={():void => history.push('/')}
+          >
+            <i className="fas fa-chevron-circle-left" aria-hidden={true}></i>
+            Go Back
+          </Button>
 
-      <br />
+          <br />
 
-      {photos?.length ? (
-        <PhotoList>
-          {photos.map(photo => {
-            return <PhotoItem 
-              key={photo.id}
-              photo={photo}
-            />
-          })}
-        </PhotoList>
-      ) : <NoData>No photos</NoData>}
+          {photos?.length ? (
+            <PhotoList>
+              {photos.map(photo => {
+                return <PhotoItem 
+                  key={photo.id}
+                  photo={photo}
+                />
+              })}
+            </PhotoList>
+          ) : <NoData>No photos</NoData>}
+        </>
+      )}
     </div>
   )
 }
