@@ -7,7 +7,7 @@ import { useAppSelector } from '../app/hooks/useAppSelector'
 import { AppDispatch } from '../app/store'
 import Loader from '../components/Loader'
 import PhotoItem from '../components/PhotoItem'
-import { getPhotos } from '../services/photos-service'
+import { TYPES } from '../app/types'
 
 
 const PhotoList = styled.div`
@@ -41,7 +41,7 @@ const Photos:FC = () => {
 
 
   useEffect(():void => {
-    dispatch(getPhotos(params.id))
+    dispatch({ type: TYPES.REQUEST_PHOTOS, payload: params.id })
   }, [dispatch, params])
 
 

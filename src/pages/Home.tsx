@@ -5,7 +5,8 @@ import { loadMoreAlbums } from '../app/features/albums/albumsSlice'
 import { useAppSelector } from '../app/hooks/useAppSelector'
 import { AppDispatch } from '../app/store'
 import AlbumItem from '../components/AlbumItem'
-import { getAlbums } from '../services/albums-service'
+import { TYPES } from '../app/types'
+
 
 
 const HomePage = styled.div`
@@ -49,7 +50,7 @@ const Home:FC = () => {
   const dispatch = useDispatch<AppDispatch>()
 
   useEffect(():void => {
-    dispatch(getAlbums())
+    dispatch({ type: TYPES.REQUEST_ALBUMS, payload: limit })
   }, [dispatch, limit])
 
 
