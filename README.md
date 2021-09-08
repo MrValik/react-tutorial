@@ -1,3 +1,12 @@
+## Branches
+The project used 3 branches
+* react
+* react-redux
+* react-redux-toolkit
+
+You can use the command - `git checkout [branchname]` to select a branch
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
